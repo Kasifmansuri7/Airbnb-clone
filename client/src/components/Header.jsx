@@ -6,12 +6,12 @@ import { UserContext } from "../userContext";
 function Header() {
   const { user } = useContext(UserContext);
   return (
-    <header className="flex items-center justify-between">
-      <Link to="/" className="left p-4">
-        <img src={mainLogo} alt="logo" className="h-6" />
+    <header className="flex items-center justify-between  ">
+      <Link to="/" className=" py-4 px-3">
+        <img src={mainLogo} alt="logo" className="h-8 " />
       </Link>
 
-      <div className="center flex  border border-gray-300 gap-2 rounded-full py-1 px-2 shadow-md shadow-gray-300 ">
+      <div className="center flex items-center border border-gray-300 gap-2 rounded-full py-1 px-2 shadow-md shadow-gray-300 ">
         <div>Anywhere</div>
         <div className="border border-l border-gray-300 mx-22" />
         <div>Anyweek</div>
