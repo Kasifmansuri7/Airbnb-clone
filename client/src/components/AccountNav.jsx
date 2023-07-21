@@ -1,8 +1,10 @@
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation,  } from "react-router-dom";
 
 function AccountNav() {
-  let { subpage } = useParams();
+  const {pathname} = useLocation();
+  let subpage = pathname.split("/")?.[2];
+
   if (subpage === undefined) {
     subpage = "profile";
   }

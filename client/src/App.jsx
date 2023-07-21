@@ -4,9 +4,12 @@ import Layout from "./Layout";
 import Homepage from "./pages/Homepage";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import Account from "./components/Account";
+import ProfilePage from "./components/ProfilePage";
+import PlacesPage from "./components/PlacesPage";
+import BookingPage from "./components/BookingPage";
 import axios from "axios";
 import { UserContextProvider } from "./userContext";
+import PlacesForm from "./components/PlacesForm";
 
 axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.withCredentials = true;
@@ -30,12 +33,24 @@ function App() {
           element: <Register />,
         },
         {
-          path: "/account/:subpage?",
-          element: <Account />,
+          path: "/account",
+          element: <ProfilePage />,
         },
         {
-          path: "/account/:subpage/:action",
-          element: <Account />,
+          path: "/account/places",
+          element: <PlacesPage />,
+        },
+        {
+          path: "/account/places/new",
+          element: <PlacesForm />,
+        },
+        {
+          path: "/account/places/:id",
+          element: <PlacesForm />,
+        },
+        {
+          path: "/account/bookings",
+          element: <BookingPage />,
         },
       ],
     },

@@ -6,8 +6,8 @@ import { UserContext } from "../userContext";
 function Header() {
   const { user } = useContext(UserContext);
   return (
-    <header className="flex items-center justify-between  ">
-      <Link to="/" className=" py-4 px-3">
+    <header className="flex items-center justify-between ">
+      <Link to="/" className="shrink-0 py-4 px-3">
         <img src={mainLogo} alt="logo" className="h-8 " />
       </Link>
 

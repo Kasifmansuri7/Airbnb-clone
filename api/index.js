@@ -127,28 +127,28 @@ app.post("/upload", photosMiddleWare.array("photos", 100), (req, res) => {
   res.json(uploadedFiles);
 });
 
-//ADDING NEW PLACE
+//ADD NEW PLACE
 app.post("/places", async (req, res) => {
   const { token } = req.cookies;
   const {
     title,
     address,
-    desc,
     addedPhotos,
+    desc,
     perks,
     extraInfo,
     checkIn,
     checkOut,
     maxGuests,
   } = req.body;
+
   jwt.verify(token, process.env.JWT_SECRET_KEY, {}, async (err, userData) => {
     if (err) throw err;
-
     const placeDoc = await Place.create({
       owner: userData.id,
       title,
       address,
-      addedPhotos,
+      photos: addedPhotos,
       desc,
       perks,
       extraInfo,
@@ -161,17 +161,59 @@ app.post("/places", async (req, res) => {
   });
 });
 
-//FIND ALL PLACES
+//FIND USER's PLACES
 app.get("/places", (req, res) => {
   const { token } = req.cookies;
 
   jwt.verify(token, process.env.JWT_SECRET_KEY, {}, async (err, userData) => {
     if (err) throw err;
-    const places = await Place.find({});
+    const places = await Place.find({ owner: userData.id });
     res.json(places);
   });
 });
 
+//GET A PLACE
+app.get("/places/:id", async (req, res) => {
+  const place = await Place.findById(req.params.id);
+  res.json(place);
+});
+
+//UPDATE PLACE DETAILS
+app.put("/places/", async (req, res) => {
+  const { token } = req.cookies;
+  const {
+    id,
+    title,
+    address,
+    addedPhotos,
+    desc,
+    perks,
+    extraInfo,
+    checkIn,
+    checkOut,
+    maxGuests,
+  } = req.body;
+
+  jwt.verify(token, process.env.JWT_SECRET_KEY, {}, async (err, userData) => {
+    if (err) throw err;
+    const placeDoc = await Place.findById(id);
+    if (userData.id === placeDoc.owner.toString()) {
+      placeDoc.set({
+        title,
+        address,
+        photos: addedPhotos,
+        desc,
+        perks,
+        extraInfo,
+        checkIn,
+        checkOut,
+        maxGuests,
+      });
+      await placeDoc.save();
+      res.json("Updated");
+    }
+  });
+});
 app.listen(3000, () => {
   console.log("Server started on port 3000");
 });
