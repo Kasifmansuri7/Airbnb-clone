@@ -6,6 +6,9 @@ import jwt from "jsonwebtoken";
 import connectDB from "./models/connect.js";
 import * as dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import download from "image-downloader";
+import multer from "multer";
+import fs from "fs";
 //models
 import User from "./models/User.js";
 dotenv.config();
@@ -23,6 +26,10 @@ app.use(
     credentials: true,
     origin: "http://localhost:5173",
   })
+);
+app.use(
+  "/uploads",
+  express.static("D:\\Tutorial\\Projects\\airbnb\\api/uploads")
 );
 
 app.get("/", (req, res) => {
@@ -77,7 +84,6 @@ app.post("/logout", (req, res) => {
   res.cookie("token", "").json(true);
 });
 
-
 //PROFILE INFORMATION
 app.get("/profile", (req, res) => {
   const { token } = req.cookies;
@@ -91,6 +97,33 @@ app.get("/profile", (req, res) => {
   } else {
     res.json(null);
   }
+});
+
+//UPLOAD BY LINK
+app.post("/upload-by-link", async (req, res) => {
+  const { link } = req.body;
+  const newName = Date.now() + ".jpg";
+  await download.image({
+    url: link,
+    dest: "D:\\Tutorial\\Projects\\airbnb\\api/uploads/" + newName,
+  });
+  res.json(newName);
+});
+
+//UPLOAD LOCALLY
+const photosMiddleWare = multer({ dest: "uploads/" });
+app.post("/upload", photosMiddleWare.array("photos", 100), (req, res) => {
+  const uploadedFiles = [];
+  //adding extention to images
+  for (let i = 0; i < req.files.length; i++) {
+    let { path, originalname } = req.files[i];
+    const parts = originalname.split(".");
+    const ext = parts[parts.length - 1];
+    const newPath = path + "." + ext;
+    fs.renameSync(path, newPath);
+    uploadedFiles.push(newPath.replace("uploads\\", ""));
+  }
+  res.json(uploadedFiles);
 });
 
 app.listen(3000, () => {

@@ -19,12 +19,12 @@ function Account() {
     setUser(null);
   }
 
-  if (!ready) {
+  if (!user) {
     return <div className="text-lg text-center">Loading...</div>;
   }
   //redirect if no user found
   //   !user && navigate("/login");
-  if (ready && !user) {
+  if (!user) {
     navigate("/login");
   }
 
