@@ -1,19 +1,41 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 import Perks from "./Perks";
 import PhotosUploader from "./PhotosUploader";
+import AddPlaceInput from "./AddPlaceInput";
 
 function PlacesPage() {
   const { action } = useParams();
+  const navigate = useNavigate();
   const [title, setTitle] = useState("");
   const [address, setAddress] = useState("");
   const [desc, setDesc] = useState("");
+  const [addedPhotos, setAddedPhotos] = useState([]);
   const [perks, setPerks] = useState([]);
   const [extraInfo, setExtraInfo] = useState("");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [maxGuests, setMaxGuests] = useState(1);
 
+  async function addNewPlace(event) {
+    event.preventDefault();
+    const newPlaceData = {
+      title,
+      address,
+      desc,
+      addedPhotos,
+      perks,
+      extraInfo,
+      checkIn,
+      checkOut,
+      maxGuests,
+    };
+
+    const { data } = await axios.post("/places", newPlaceData);
+    alert("New place added successfully!");
+    navigate("/account/places");
+  }
   function preInput(header, desc) {
     return (
       <React.Fragment>
@@ -23,42 +45,12 @@ function PlacesPage() {
     );
   }
 
-  function handlePerks(name) {
-    if (perks.includes(name)) {
-      setPerks((prev) => prev.filter((item) => item !== name));
-    } else {
-      setPerks((prev) => [...prev, name]);
-    }
-  }
   return (
     <div>
-      {action !== "new" && (
-        <div className="text-center">
-          <Link
-            to={"/account/places/new"}
-            className=" inline-flex gap-1 bg-primary text-white py-2 px-4 rounded-full"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 4.5v15m7.5-7.5h-15"
-              />
-            </svg>
-            Add new place
-          </Link>
-        </div>
-      )}
+      {action !== "new" && <AddPlaceInput />}
       {action === "new" && (
         <div>
-          <form>
+          <form onSubmit={addNewPlace}>
             {preInput(
               "Title",
               "Title for your place should be short and catchy."
@@ -78,11 +70,14 @@ function PlacesPage() {
               onChange={(e) => setAddress(e.target.value)}
             />
             {preInput("Photos", "Photos should me clear and visible.")}
-            <PhotosUploader />
+            <PhotosUploader
+              addedPhotos={addedPhotos}
+              setAddedPhotos={setAddedPhotos}
+            />
             {preInput("Description", "Description of the place")}
             <textarea value={desc} onChange={(e) => setDesc(e.target.value)} />
             {preInput("Perks", "Select all the perks of your place.")}
-            <Perks selected={perks} onChange={handlePerks} />
+            <Perks selected={perks} onChange={setPerks} />
             {preInput("Extra Info", "rules and regulation etc.,")}
             <textarea
               value={extraInfo}
@@ -96,7 +91,7 @@ function PlacesPage() {
               <div>
                 <h3 className="mt-2 -mb-1">Check In Time</h3>
                 <input
-                  type="text"
+                  type="time"
                   placeholder="14:00"
                   value={checkIn}
                   onChange={(e) => setCheckIn(e.target.value)}
@@ -105,7 +100,7 @@ function PlacesPage() {
               <div>
                 <h3 className="mt-2 -mb-1">Check Out Time</h3>
                 <input
-                  type="text"
+                  type="time"
                   placeholder="14:00"
                   value={checkOut}
                   onChange={(e) => setCheckOut(e.target.value)}

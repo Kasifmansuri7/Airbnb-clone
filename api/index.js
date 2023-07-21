@@ -11,6 +11,7 @@ import multer from "multer";
 import fs from "fs";
 //models
 import User from "./models/User.js";
+import Place from "./models/Place.js";
 dotenv.config();
 //connect to DB
 connectDB(process.env.MONGODB_URL);
@@ -124,6 +125,51 @@ app.post("/upload", photosMiddleWare.array("photos", 100), (req, res) => {
     uploadedFiles.push(newPath.replace("uploads\\", ""));
   }
   res.json(uploadedFiles);
+});
+
+//ADDING NEW PLACE
+app.post("/places", async (req, res) => {
+  const { token } = req.cookies;
+  const {
+    title,
+    address,
+    desc,
+    addedPhotos,
+    perks,
+    extraInfo,
+    checkIn,
+    checkOut,
+    maxGuests,
+  } = req.body;
+  jwt.verify(token, process.env.JWT_SECRET_KEY, {}, async (err, userData) => {
+    if (err) throw err;
+
+    const placeDoc = await Place.create({
+      owner: userData.id,
+      title,
+      address,
+      addedPhotos,
+      desc,
+      perks,
+      extraInfo,
+      checkIn,
+      checkOut,
+      maxGuests,
+    });
+
+    res.json(placeDoc);
+  });
+});
+
+//FIND ALL PLACES
+app.get("/places", (req, res) => {
+  const { token } = req.cookies;
+
+  jwt.verify(token, process.env.JWT_SECRET_KEY, {}, async (err, userData) => {
+    if (err) throw err;
+    const places = await Place.find({});
+    res.json(places);
+  });
 });
 
 app.listen(3000, () => {

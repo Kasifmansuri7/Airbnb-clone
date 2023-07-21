@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-function PhotosUploader() {
+function PhotosUploader({addedPhotos, setAddedPhotos}) {
   const [photoLink, setPhotoLink] = useState("");
-  const [addedPhotos, setAddedPhotos] = useState([]);
 
   async function addPhotoByLink(event) {
     event.preventDefault();

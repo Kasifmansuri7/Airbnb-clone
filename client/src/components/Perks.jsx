@@ -3,7 +3,12 @@ import React from "react";
 function Perks({ selected, onChange }) {
   function handleClick(e) {
     const name = e.target.name;
-    onChange(name);
+
+    if (selected.includes(name)) {
+      onChange(selected.filter((item) => item !== name));
+    } else {
+      onChange((prev) => [...prev, name]);
+    }
   }
   return (
     <div className="grid gap-2 grid-cols-2 md:grid-cols-4 ld:grid-cols-3 sm:grid-cols-1 lg:grid-cols-6">
