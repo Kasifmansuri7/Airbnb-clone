@@ -3,7 +3,7 @@ import Header from "./components/Header";
 
 const Layout = () => {
   return (
-    <div className="p-3">
+    <div className="px-14">
       <Header />
       <Outlet />
     </div>

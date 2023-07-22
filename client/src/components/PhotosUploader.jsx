@@ -67,9 +67,9 @@ function PhotosUploader({ addedPhotos, setAddedPhotos }) {
         {addedPhotos.length > 0 && (
           <React.Fragment>
             {addedPhotos.map((item) => (
-              <div className="relative">
+              <div className="relative"  key={item}>
                 <img
-                  key={item}
+                 
                   src={"http://localhost:3000/uploads/" + item}
                   className="rounded-2xl max-h-40 min-w-full object-cover "
                   alt="image"

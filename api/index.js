@@ -127,6 +127,12 @@ app.post("/upload", photosMiddleWare.array("photos", 100), (req, res) => {
   res.json(uploadedFiles);
 });
 
+
+//GET ALL PLACES
+app.get("/places", async (req, res) => {
+  res.json(await Place.find({}));
+});
+
 //ADD NEW PLACE
 app.post("/places", async (req, res) => {
   const { token } = req.cookies;
@@ -140,6 +146,7 @@ app.post("/places", async (req, res) => {
     checkIn,
     checkOut,
     maxGuests,
+    price
   } = req.body;
 
   jwt.verify(token, process.env.JWT_SECRET_KEY, {}, async (err, userData) => {
@@ -155,6 +162,7 @@ app.post("/places", async (req, res) => {
       checkIn,
       checkOut,
       maxGuests,
+      price
     });
 
     res.json(placeDoc);
@@ -162,7 +170,7 @@ app.post("/places", async (req, res) => {
 });
 
 //FIND USER's PLACES
-app.get("/places", (req, res) => {
+app.get("/user-places", (req, res) => {
   const { token } = req.cookies;
 
   jwt.verify(token, process.env.JWT_SECRET_KEY, {}, async (err, userData) => {
@@ -192,6 +200,7 @@ app.put("/places/", async (req, res) => {
     checkIn,
     checkOut,
     maxGuests,
+    price
   } = req.body;
 
   jwt.verify(token, process.env.JWT_SECRET_KEY, {}, async (err, userData) => {
@@ -208,12 +217,22 @@ app.put("/places/", async (req, res) => {
         checkIn,
         checkOut,
         maxGuests,
+        price
       });
       await placeDoc.save();
       res.json("Updated");
     }
   });
 });
+
+//DELETE PLACE
+app.delete("/places/:id", async (req, res)=>{
+  const id = req.params.id;
+  await Place.findByIdAndDelete(id);
+  res.json("deleted")
+})
+
+
 app.listen(3000, () => {
   console.log("Server started on port 3000");
 });

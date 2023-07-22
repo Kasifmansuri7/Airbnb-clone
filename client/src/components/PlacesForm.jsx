@@ -17,6 +17,7 @@ function PlacesForm() {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
   const [maxGuests, setMaxGuests] = useState(1);
+  const [price, setPrice] = useState("");
 
   useEffect(() => {
     if (!id) {
@@ -32,6 +33,8 @@ function PlacesForm() {
       setCheckIn(data.checkIn);
       setCheckOut(data.checkOut);
       setMaxGuests(data.maxGuests);
+      setPrice(data.price)
+
     });
   }, [id]);
 
@@ -48,6 +51,7 @@ function PlacesForm() {
       checkIn,
       checkOut,
       maxGuests,
+      price
     };
     if (id) {
       //update
@@ -61,8 +65,6 @@ function PlacesForm() {
     navigate("/account/places");
   }
 
- 
-  
   function preInput(header, desc) {
     return (
       <React.Fragment>
@@ -99,7 +101,6 @@ function PlacesForm() {
           <PhotosUploader
             addedPhotos={addedPhotos}
             setAddedPhotos={setAddedPhotos}
-         
           />
           {preInput("Description", "Description of the place")}
           <textarea value={desc} onChange={(e) => setDesc(e.target.value)} />
@@ -143,6 +144,14 @@ function PlacesForm() {
             </div>
           </div>
 
+          <div>
+          <h2 className="text-2xl mt-4">Price per night</h2>
+            <input
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+            />
+          </div>
           <div>
             <button type="submit" className="primary my-3">
               Save

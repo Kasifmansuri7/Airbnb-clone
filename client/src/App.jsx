@@ -49,9 +49,14 @@ function App() {
           element: <PlacesForm />,
         },
         {
+          path: "/place/:id",
+          element: <BookingPage />,
+        },
+        {
           path: "/account/bookings",
           element: <BookingPage />,
         },
+      
       ],
     },
   ]);
