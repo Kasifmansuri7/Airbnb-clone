@@ -181,7 +181,7 @@ app.get("/user-places", (req, res) => {
 });
 
 //GET A PLACE
-app.get("/places/:id", async (req, res) => {
+app.get("/place/:id", async (req, res) => {
   const place = await Place.findById(req.params.id);
   res.json(place);
 });
@@ -226,11 +226,13 @@ app.put("/places/", async (req, res) => {
 });
 
 //DELETE PLACE
-app.delete("/places/:id", async (req, res)=>{
+app.delete("/place/:id", async (req, res)=>{
   const id = req.params.id;
   await Place.findByIdAndDelete(id);
   res.json("deleted")
 })
+
+
 
 
 app.listen(3000, () => {

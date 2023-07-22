@@ -23,7 +23,7 @@ function PlacesForm() {
     if (!id) {
       return;
     }
-    axios.get(`/places/${id}`).then(({ data }) => {
+    axios.get(`/place/${id}`).then(({ data }) => {
       setTitle(data.title);
       setAddress(data.address);
       setPerks(data.perks);

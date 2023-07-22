@@ -7,9 +7,10 @@ import Register from "./components/Register";
 import ProfilePage from "./components/ProfilePage";
 import PlacesPage from "./components/PlacesPage";
 import BookingPage from "./components/BookingPage";
+import PlacesForm from "./components/PlacesForm";
+import SinglePlacePage from "./components/SinglePage/SinglePlacePage"
 import axios from "axios";
 import { UserContextProvider } from "./userContext";
-import PlacesForm from "./components/PlacesForm";
 
 axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.withCredentials = true;
@@ -50,7 +51,7 @@ function App() {
         },
         {
           path: "/place/:id",
-          element: <BookingPage />,
+          element: <SinglePlacePage />,
         },
         {
           path: "/account/bookings",

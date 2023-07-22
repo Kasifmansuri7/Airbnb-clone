@@ -2,19 +2,27 @@ import React from "react";
 
 function Perks({ selected, onChange }) {
   function handleClick(e) {
-    const name = e.target.name;
+    if (onChange) {
+      const name = e.target.name;
 
-    if (selected.includes(name)) {
-      onChange(selected.filter((item) => item !== name));
+      if (selected?.includes(name)) {
+        onChange(selected?.filter((item) => item !== name));
+      } else {
+        onChange((prev) => [...prev, name]);
+      }
     } else {
-      onChange((prev) => [...prev, name]);
+      return;
     }
-    
   }
   return (
     <div className="grid gap-2 grid-cols-2 md:grid-cols-4 ld:grid-cols-3 sm:grid-cols-1 lg:grid-cols-6">
       <label className="border p-4 flex rounded-2xl gap-2 items-center cursor-pointer mt-2 ">
-        <input type="checkbox" checked={selected.includes("wifi")} name="wifi" onChange={handleClick} />
+        <input
+          type="checkbox"
+          checked={selected?.includes("wifi")}
+          name="wifi"
+          onChange={handleClick}
+        />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -32,7 +40,12 @@ function Perks({ selected, onChange }) {
         <span>Wifi</span>
       </label>
       <label className="border p-4 flex rounded-2xl gap-2 items-center cursor-pointer mt-2 ">
-        <input type="checkbox" checked={selected.includes("free-parking")} name="free-parking" onChange={handleClick} />
+        <input
+          type="checkbox"
+          checked={selected?.includes("free-parking")}
+          name="free-parking"
+          onChange={handleClick}
+        />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -51,7 +64,12 @@ function Perks({ selected, onChange }) {
         <span>Free Parking</span>
       </label>
       <label className="border p-4 flex rounded-2xl gap-2 items-center cursor-pointer mt-2 ">
-        <input type="checkbox" checked={selected.includes("locker")} name="locker" onChange={handleClick} />
+        <input
+          type="checkbox"
+          checked={selected?.includes("locker")}
+          name="locker"
+          onChange={handleClick}
+        />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -70,7 +88,12 @@ function Perks({ selected, onChange }) {
         <span>Locker</span>
       </label>
       <label className="border p-4 flex rounded-2xl gap-2 items-center cursor-pointer mt-2 ">
-        <input type="checkbox" checked={selected.includes("heater")} name="heater" onChange={handleClick} />
+        <input
+          type="checkbox"
+          checked={selected?.includes("heater")}
+          name="heater"
+          onChange={handleClick}
+        />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -94,7 +117,12 @@ function Perks({ selected, onChange }) {
         <span>Heater</span>
       </label>
       <label className="border p-4 flex rounded-2xl gap-2 items-center cursor-pointer mt-2 ">
-        <input type="checkbox" checked={selected.includes("tv")} name="tv" onChange={handleClick} />
+        <input
+          type="checkbox"
+          checked={selected?.includes("tv")}
+          name="tv"
+          onChange={handleClick}
+        />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -113,7 +141,12 @@ function Perks({ selected, onChange }) {
         <span>TV</span>
       </label>
       <label className="border p-4 flex rounded-2xl gap-2 items-center cursor-pointer mt-2 ">
-        <input type="checkbox" checked={selected.includes("private-entrance")} name="private-entrance" onChange={handleClick} />
+        <input
+          type="checkbox"
+          checked={selected?.includes("private-entrance")}
+          name="private-entrance"
+          onChange={handleClick}
+        />
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -128,7 +161,6 @@ function Perks({ selected, onChange }) {
             d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
           />
         </svg>
-
         <span>Private entrance</span>
       </label>
     </div>

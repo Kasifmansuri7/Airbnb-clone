@@ -13,7 +13,7 @@ function PlacesPage() {
     e.preventDefault();
     const askDelete = confirm("Do you want to delete?");
     if (askDelete) {
-      await axios.delete("/places/" + id);
+      await axios.delete("/place/" + id);
       setPlaces([...places.filter((place) => place._id !== id)]);
     }
   }

@@ -71,7 +71,7 @@ function PhotosUploader({ addedPhotos, setAddedPhotos }) {
                 <img
                  
                   src={"http://localhost:3000/uploads/" + item}
-                  className="rounded-2xl max-h-40 min-w-full object-cover "
+                  className="rounded-2xl h-40 min-w-full object-cover "
                   alt="image"
                 />
                 <button

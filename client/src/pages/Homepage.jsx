@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import short from "short-uuid";
 
 function Homepage() {
   const [places, setPlaces] = useState([]);
@@ -15,7 +16,7 @@ function Homepage() {
       {places.length > 0 &&
         places.map((place) => {
           return (
-            <Link to={"/place/"+place._id}>
+            <Link to={"/place/" + place._id} key={short.generate()}>
               <div className="flex ">
                 <img
                   className="rounded-2xl object-cover aspect-square"

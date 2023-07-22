@@ -4,18 +4,23 @@
 
 input[type="text"],
 input[type="password"],
-input[type="email"], input[type="number"],input[type="time"], textarea {
+input[type="email"],
+input[type="number"],
+input[type="time"],
+input[type="date"],
+textarea {
   @apply w-full border my-2 py-2 px-3 rounded-xl;
 }
-textarea{
+textarea {
   height: 150px;
 }
 
 button {
   @apply bg-gray-300;
 }
-
+.h98 {
+  height: calc(53% - 2rem);
+}
 button.primary {
-
   @apply bg-primary p-2 w-full text-white rounded-2xl;
 }
