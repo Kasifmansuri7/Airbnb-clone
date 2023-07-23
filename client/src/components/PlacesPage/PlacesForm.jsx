@@ -3,7 +3,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Perks from "./Perks";
 import PhotosUploader from "./PhotosUploader";
-import AccountNav from "./AccountNav";
+import AccountNav from "../AccountNav";
 
 function PlacesForm() {
   const { id } = useParams();

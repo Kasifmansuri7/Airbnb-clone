@@ -1,43 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import SearchInputs from "../components/HomePage/SearchInputs";
+import PlaceCard from "../components/HomePage/PlaceCard";
 import axios from "axios";
 import short from "short-uuid";
+import { UserContext } from "../userContext";
 
 function Homepage() {
   const [places, setPlaces] = useState([]);
+  const [searchText, setSearchText] = useState("");
+  const { active } = useContext(UserContext);
+
   useEffect(() => {
-    axios.get("/places").then(({ data }) => {
-      setPlaces([...data, ...data, ...data, ...data, ...data]);
-    });
-  }, []);
+    const getResult = setTimeout(() => {
+      console.log("Called");
+      axios.get("/places").then(({ data }) => {
+        const foundPlaces = [...data].filter(
+          (place) =>
+            place.title.toLowerCase().includes(searchText) ||
+            place.address.toLowerCase().includes(searchText)
+        );
+        setPlaces([...foundPlaces]);
+      });
+    }, 500);
+    return () => clearTimeout(getResult);
+  }, [searchText]);
 
   return (
-    <div className=" px-6 mt-10 grid  gap-x-6 gap-y-8 md:grid-cols-4 sm:grid-cols-1">
-      {places.length > 0 &&
-        places.map((place) => {
-          return (
-            <Link to={"/place/" + place._id} key={short.generate()}>
-              <div className="flex ">
-                <img
-                  className="rounded-2xl object-cover aspect-square"
-                  src={"http://localhost:3000/uploads/" + place.photos[0]}
-                />
-              </div>
-              <div className="py-2 ">
-                <h2 className="text-md font-semibold leading-6">
-                  {place.address}
-                </h2>
-                <h2 className="text-sm truncate text-gray-500 leading-6">
-                  {place.title}
-                </h2>
-                <div className="mt-1 text-sm  leading-6">
-                  <span className="font-bold">${place.price}</span> per night
-                </div>
-              </div>
-            </Link>
-          );
-        })}
-    </div>
+    <React.Fragment>
+      {active && <SearchInputs setSearchText={setSearchText} />}
+      <div className=" px-6 mt-10 grid  gap-x-6 gap-y-8 md:grid-cols-4 sm:grid-cols-1">
+        {places.length > 0 &&
+          places.map((place) => {
+            return <PlaceCard place={place} key={short.generate()} />;
+          })}
+      </div>
+    </React.Fragment>
   );
 }
 

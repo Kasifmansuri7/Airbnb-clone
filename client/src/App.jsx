@@ -4,11 +4,12 @@ import Layout from "./Layout";
 import Homepage from "./pages/Homepage";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import ProfilePage from "./components/ProfilePage";
-import PlacesPage from "./components/PlacesPage";
-import BookingPage from "./components/BookingPage";
-import PlacesForm from "./components/PlacesForm";
-import SinglePlacePage from "./components/SinglePage/SinglePlacePage"
+import ProfilePage from "./pages/ProfilePage";
+import PlacesPage from "./pages/PlacesPage";
+import BookingsPage from "./pages/BookingsPage";
+import PlacesForm from "./components/PlacesPage/PlacesForm";
+import SinglePlacePage from "./pages/SinglePlacePage";
+import SingleBookingPage from "./pages/SingleBookingPage";
 import axios from "axios";
 import { UserContextProvider } from "./userContext";
 
@@ -55,9 +56,12 @@ function App() {
         },
         {
           path: "/account/bookings",
-          element: <BookingPage />,
+          element: <BookingsPage />,
         },
-      
+        {
+          path: "/account/bookings/:id",
+          element: <SingleBookingPage />,
+        },
       ],
     },
   ]);

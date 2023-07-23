@@ -1,10 +1,12 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { mainLogo } from "../assets";
 import { Link } from "react-router-dom";
 import { UserContext } from "../userContext";
 
 function Header() {
+  const { setActive } = useContext(UserContext);
   const { user } = useContext(UserContext);
+
   return (
     <header className="flex items-center justify-between ">
       <Link to="/" className="shrink-0 py-4 px-3">
@@ -17,7 +19,10 @@ function Header() {
         <div>Anyweek</div>
         <div className="border border-l border-gray-300" />
         <div>Add guests</div>
-        <button className="bg-primary text-white p-1 rounded-full  ">
+        <button
+          onClick={() => setActive((pre) => !pre)}
+          className="bg-primary text-white p-1 rounded-full"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

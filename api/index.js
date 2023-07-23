@@ -13,6 +13,7 @@ import fs from "fs";
 import User from "./models/User.js";
 import Place from "./models/Place.js";
 import Booking from "./models/Booking.js";
+
 dotenv.config();
 //connect to DB
 connectDB(process.env.MONGODB_URL);
@@ -29,6 +30,21 @@ app.use(
     origin: "http://localhost:5173",
   })
 );
+
+function getUserData(req) {
+  return new Promise((resolve, rejects) => {
+    jwt.verify(
+      req.cookies.token,
+      process.env.JWT_SECRET_KEY,
+      {},
+      async (err, userData) => {
+        if (err) throw err;
+        resolve(userData);
+      }
+    );
+  });
+}
+
 app.use(
   "/uploads",
   express.static("D:\\Tutorial\\Projects\\airbnb\\api/uploads")
@@ -234,8 +250,11 @@ app.delete("/place/:id", async (req, res) => {
 
 //BOOK A PLACE
 app.post("/booking", async (req, res) => {
-  const { place,name, email, phone, checkIn, checkOut, guests, amount } = req.body;
+  const { place, name, email, phone, checkIn, checkOut, guests, amount } =
+    req.body;
+  const userData = await getUserData(req);
   const bookingDoc = await Booking.create({
+    user: userData.id,
     place,
     name,
     email,
@@ -246,6 +265,13 @@ app.post("/booking", async (req, res) => {
     amount,
   });
 
+  res.json(bookingDoc);
+});
+
+//BOOKINGS INFO
+app.get("/bookings", async (req, res) => {
+  const userData = await getUserData(req);
+  const bookingDoc = await Booking.find({ user: userData.id }).populate('place');
   res.json(bookingDoc);
 });
 

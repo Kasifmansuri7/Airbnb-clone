@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { UserContext } from "../userContext";
 import { useNavigate } from "react-router-dom";
-import AccountNav from "./AccountNav";
+import AccountNav from "../components/AccountNav";
 import axios from "axios";
 
 function ProfilePage() {
