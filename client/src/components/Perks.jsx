@@ -4,7 +4,6 @@ function Perks({ selected, onChange }) {
   function handleClick(e) {
     if (onChange) {
       const name = e.target.name;
-
       if (selected?.includes(name)) {
         onChange(selected?.filter((item) => item !== name));
       } else {

@@ -12,6 +12,7 @@ import fs from "fs";
 //models
 import User from "./models/User.js";
 import Place from "./models/Place.js";
+import Booking from "./models/Booking.js";
 dotenv.config();
 //connect to DB
 connectDB(process.env.MONGODB_URL);
@@ -127,7 +128,6 @@ app.post("/upload", photosMiddleWare.array("photos", 100), (req, res) => {
   res.json(uploadedFiles);
 });
 
-
 //GET ALL PLACES
 app.get("/places", async (req, res) => {
   res.json(await Place.find({}));
@@ -146,7 +146,7 @@ app.post("/places", async (req, res) => {
     checkIn,
     checkOut,
     maxGuests,
-    price
+    price,
   } = req.body;
 
   jwt.verify(token, process.env.JWT_SECRET_KEY, {}, async (err, userData) => {
@@ -162,7 +162,7 @@ app.post("/places", async (req, res) => {
       checkIn,
       checkOut,
       maxGuests,
-      price
+      price,
     });
 
     res.json(placeDoc);
@@ -200,7 +200,7 @@ app.put("/places/", async (req, res) => {
     checkIn,
     checkOut,
     maxGuests,
-    price
+    price,
   } = req.body;
 
   jwt.verify(token, process.env.JWT_SECRET_KEY, {}, async (err, userData) => {
@@ -217,7 +217,7 @@ app.put("/places/", async (req, res) => {
         checkIn,
         checkOut,
         maxGuests,
-        price
+        price,
       });
       await placeDoc.save();
       res.json("Updated");
@@ -226,14 +226,28 @@ app.put("/places/", async (req, res) => {
 });
 
 //DELETE PLACE
-app.delete("/place/:id", async (req, res)=>{
+app.delete("/place/:id", async (req, res) => {
   const id = req.params.id;
   await Place.findByIdAndDelete(id);
-  res.json("deleted")
-})
+  res.json("deleted");
+});
 
+//BOOK A PLACE
+app.post("/booking", async (req, res) => {
+  const { place,name, email, phone, checkIn, checkOut, guests, amount } = req.body;
+  const bookingDoc = await Booking.create({
+    place,
+    name,
+    email,
+    phone,
+    checkIn,
+    checkOut,
+    guests,
+    amount,
+  });
 
-
+  res.json(bookingDoc);
+});
 
 app.listen(3000, () => {
   console.log("Server started on port 3000");
