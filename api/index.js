@@ -54,7 +54,7 @@ function getUserData(req) {
 
 app.use(
   "/uploads",
-  express.static("D:\\Tutorial\\Projects\\airbnb\\api/uploads")
+  express.static("./uploads") //D:\\Tutorial\\Projects\\airbnb\\api
 );
 
 app.get("/", (req, res) => {
@@ -64,7 +64,6 @@ app.get("/", (req, res) => {
 //REGISTER USER
 app.post("/register", async (req, res) => {
   const { name, email, password } = req.body;
-
   try {
     const newUser = await User.create({
       name,
