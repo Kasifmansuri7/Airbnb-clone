@@ -1,45 +1,62 @@
 import React, { useState } from "react";
+import Loader from "../Loader";
 import axios from "axios";
 
 function PhotosUploader({ addedPhotos, setAddedPhotos }) {
   const [photoLink, setPhotoLink] = useState("");
+  const [uploadingImg, setUploadingImg] = useState(false);
 
   async function addPhotoByLink(event) {
-    event.preventDefault();
-    const { data: filename } = await axios.post("/upload-by-link", {
-      link: photoLink,
-    });
-    setAddedPhotos((prev) => {
-      return [...prev, filename];
-    });
-    setPhotoLink("");
+    setUploadingImg(true);
+    try {
+      event.preventDefault();
+      const { data: filename } = await axios.post("/upload-by-link", {
+        link: photoLink,
+      });
+      setAddedPhotos((prev) => {
+        return [...prev, filename];
+      });
+      setPhotoLink("");
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setUploadingImg(false);
+    }
   }
 
   async function uploadPhoto(e) {
-    const files = e.target.files;
-    const data = new FormData();
+    setUploadingImg(true);
+    try {
+      const files = e.target.files;
+      const data = new FormData();
 
-    for (let i = 0; i < files.length; i++) {
-      data.append("photos", files[i]);
-    }
+      for (let i = 0; i < files.length; i++) {
+        data.append("photos", files[i]);
+      }
 
-    await axios
-      .post("/upload", data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
-      .then((response) => {
-        const { data: filenames } = response;
-        setAddedPhotos((prev) => {
-          return [...prev, ...filenames];
+      await axios
+        .post("/upload", data, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then((response) => {
+          const { data: filenames } = response;
+          setAddedPhotos((prev) => {
+            return [...prev, ...filenames];
+          });
         });
-      });
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setUploadingImg(false);
+    }
   }
-  function removePhoto(e,name) {
+
+  function removePhoto(e, name) {
     e.preventDefault();
     setAddedPhotos(addedPhotos.filter((photo) => photo !== name));
   }
 
-  function selectAsMainPhoto(e,name) {
+  function selectAsMainPhoto(e, name) {
     e.preventDefault();
     setAddedPhotos([name, ...addedPhotos.filter((photo) => photo !== name)]);
   }
@@ -67,10 +84,9 @@ function PhotosUploader({ addedPhotos, setAddedPhotos }) {
         {addedPhotos.length > 0 && (
           <React.Fragment>
             {addedPhotos.map((item) => (
-              <div className="relative"  key={item}>
+              <div className="relative" key={item}>
                 <img
-                 
-                  src={"http://localhost:3000/uploads/" + item}
+                  src={item}
                   className="rounded-2xl h-40 min-w-full object-cover "
                   alt="image"
                 />
@@ -136,9 +152,11 @@ function PhotosUploader({ addedPhotos, setAddedPhotos }) {
             ))}
           </React.Fragment>
         )}
-        <label className=" cursor-pointer flex items-center gap-1 justify-center border bg-transparent rounded-2xl py-10 px-6 text-2xl text-gray-600">
+
+        <label className="relative cursor-pointer flex items-center gap-1 justify-center border bg-transparent rounded-2xl py-10 px-6 text-2xl text-gray-600">
           <input
             type="file"
+            name="image"
             className="hidden"
             multiple
             onChange={uploadPhoto}
@@ -158,6 +176,11 @@ function PhotosUploader({ addedPhotos, setAddedPhotos }) {
             />
           </svg>
           Upload
+          {uploadingImg && (
+            <div className="absolute rounded-2xl inset-0 z-0 flex justify-center items-center bg-[rgba(0,0,0,0.5)]">
+              <Loader />
+            </div>
+          )}
         </label>
       </div>
     </React.Fragment>

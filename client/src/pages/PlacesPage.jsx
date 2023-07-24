@@ -34,7 +34,7 @@ function PlacesPage() {
               <div className="h-40  grow shrink-0">
                 {place.photos.length > 0 && (
                   <img
-                    src={"http://localhost:3000/uploads/" + place.photos[0]}
+                    src={place.photos[0]}
                     className="rounded-2xl h-full w-50 object-cover grow"
                   />
                 )}

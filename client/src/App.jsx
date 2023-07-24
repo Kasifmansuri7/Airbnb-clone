@@ -13,6 +13,7 @@ import SingleBookingPage from "./pages/SingleBookingPage";
 import axios from "axios";
 import { UserContextProvider } from "./userContext";
 
+
 axios.defaults.baseURL = "http://localhost:3000";
 axios.defaults.withCredentials = true;
 

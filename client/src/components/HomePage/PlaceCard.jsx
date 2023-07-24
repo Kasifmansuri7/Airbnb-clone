@@ -8,7 +8,7 @@ function PlaceCard({ place }) {
       <div className="flex ">
         <img
           className="rounded-2xl object-cover aspect-square"
-          src={"http://localhost:3000/uploads/" + place.photos[0]}
+          src={place.photos[0]}
         />
       </div>
       <div className="py-2 ">

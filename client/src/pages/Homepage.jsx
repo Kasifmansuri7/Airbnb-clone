@@ -12,7 +12,6 @@ function Homepage() {
 
   useEffect(() => {
     const getResult = setTimeout(() => {
-      console.log("Called");
       axios.get("/places").then(({ data }) => {
         const foundPlaces = [...data].filter(
           (place) =>

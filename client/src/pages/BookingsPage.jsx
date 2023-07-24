@@ -3,7 +3,6 @@ import axios from "axios";
 import AccountNav from "../components/AccountNav";
 import { UserContext } from "../userContext";
 import { Link, useNavigate } from "react-router-dom";
-
 import BookingDates from "../components/BookingPage/BookingDates";
 import PriceAndNights from "../components/BookingPage/PriceAndNights";
 
@@ -23,6 +22,7 @@ function BookingsPage() {
     navigate("/login");
   }
 
+
   return (
     <div>
       <AccountNav />
@@ -39,7 +39,7 @@ function BookingsPage() {
                   <img
                     className="rounded-xl"
                     src={
-                      "http://localhost:3000/uploads/" + booking.place.photos[0]
+                      booking?.place?.photos[0]
                     }
                   />
                 )}

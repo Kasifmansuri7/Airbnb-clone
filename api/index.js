@@ -6,13 +6,14 @@ import jwt from "jsonwebtoken";
 import connectDB from "./models/connect.js";
 import * as dotenv from "dotenv";
 import cookieParser from "cookie-parser";
-import download from "image-downloader";
 import multer from "multer";
 import fs from "fs";
+import { v2 as cloudinary } from "cloudinary";
 //models
 import User from "./models/User.js";
 import Place from "./models/Place.js";
 import Booking from "./models/Booking.js";
+
 
 dotenv.config();
 //connect to DB
@@ -21,13 +22,19 @@ connectDB(process.env.MONGODB_URL);
 //PASSWORD HASHING
 const bcryptSalt = bcrypt.genSaltSync(10);
 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 // SETUP
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
   })
 );
 
@@ -120,17 +127,20 @@ app.get("/profile", (req, res) => {
 //UPLOAD BY LINK
 app.post("/upload-by-link", async (req, res) => {
   const { link } = req.body;
-  const newName = Date.now() + ".jpg";
-  await download.image({
-    url: link,
-    dest: "D:\\Tutorial\\Projects\\airbnb\\api/uploads/" + newName,
-  });
-  res.json(newName);
+  const result = await cloudinary.uploader.upload(link);
+  res.json(result.secure_url);
 });
 
-//UPLOAD LOCALLY
+// await download.image({
+//   url: link,
+//   dest: "D:\\Tutorial\\Projects\\airbnb\\api/uploads/" + newName,
+// });
+
+//UPLOAD FROM LOCALLY
 const photosMiddleWare = multer({ dest: "uploads/" });
-app.post("/upload", photosMiddleWare.array("photos", 100), (req, res) => {
+
+app.post("/upload", photosMiddleWare.array("photos", 100), async (req, res) => {
+  const images = [];
   const uploadedFiles = [];
   //adding extention to images
   for (let i = 0; i < req.files.length; i++) {
@@ -139,7 +149,12 @@ app.post("/upload", photosMiddleWare.array("photos", 100), (req, res) => {
     const ext = parts[parts.length - 1];
     const newPath = path + "." + ext;
     fs.renameSync(path, newPath);
-    uploadedFiles.push(newPath.replace("uploads\\", ""));
+    images.push("./" + newPath);
+  }
+
+  for (let image of images) {
+    const result = await cloudinary.uploader.upload(image);
+    uploadedFiles.push(result.secure_url);
   }
   res.json(uploadedFiles);
 });
@@ -271,7 +286,9 @@ app.post("/booking", async (req, res) => {
 //BOOKINGS INFO
 app.get("/bookings", async (req, res) => {
   const userData = await getUserData(req);
-  const bookingDoc = await Booking.find({ user: userData.id }).populate('place');
+  const bookingDoc = await Booking.find({ user: userData.id }).populate(
+    "place"
+  );
   res.json(bookingDoc);
 });
 
