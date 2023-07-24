@@ -159,13 +159,13 @@ app.post("/upload", photosMiddleWare.array("photos", 100), async (req, res) => {
   res.json(uploadedFiles);
 });
 
-//GET ALL PLACES
+//GET ALL PLACES FOR HOME PAGE
 app.get("/places", async (req, res) => {
   res.json(await Place.find({}));
 });
 
 //ADD NEW PLACE
-app.post("/places", async (req, res) => {
+app.post("/place", async (req, res) => {
   const { token } = req.cookies;
   const {
     title,
@@ -200,25 +200,8 @@ app.post("/places", async (req, res) => {
   });
 });
 
-//FIND USER's PLACES
-app.get("/user-places", (req, res) => {
-  const { token } = req.cookies;
-
-  jwt.verify(token, process.env.JWT_SECRET_KEY, {}, async (err, userData) => {
-    if (err) throw err;
-    const places = await Place.find({ owner: userData.id });
-    res.json(places);
-  });
-});
-
-//GET A PLACE
-app.get("/place/:id", async (req, res) => {
-  const place = await Place.findById(req.params.id);
-  res.json(place);
-});
-
 //UPDATE PLACE DETAILS
-app.put("/places/", async (req, res) => {
+app.put("/place", async (req, res) => {
   const { token } = req.cookies;
   const {
     id,
@@ -255,6 +238,24 @@ app.put("/places/", async (req, res) => {
     }
   });
 });
+
+//FIND USER's PLACES
+app.get("/user-places", (req, res) => {
+  const { token } = req.cookies;
+
+  jwt.verify(token, process.env.JWT_SECRET_KEY, {}, async (err, userData) => {
+    if (err) throw err;
+    const places = await Place.find({ owner: userData.id });
+    res.json(places);
+  });
+});
+
+//GET A PLACE
+app.get("/place/:id", async (req, res) => {
+  const place = await Place.findById(req.params.id);
+  res.json(place);
+});
+
 
 //DELETE PLACE
 app.delete("/place/:id", async (req, res) => {

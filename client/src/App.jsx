@@ -13,8 +13,9 @@ import SingleBookingPage from "./pages/SingleBookingPage";
 import axios from "axios";
 import { UserContextProvider } from "./userContext";
 
+const backEndURL = import.meta.env.VITE_APP_BACKEND_URL
 
-axios.defaults.baseURL = "http://localhost:3000";
+axios.defaults.baseURL = backEndURL;
 axios.defaults.withCredentials = true;
 
 function App() {
