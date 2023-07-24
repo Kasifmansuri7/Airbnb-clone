@@ -16,7 +16,6 @@ import Place from "./models/Place.js";
 import Booking from "./models/Booking.js";
 const PORT = process.env.PORT || 3000;
 
-
 //connect to DB
 connectDB(process.env.MONGODB_URL);
 
@@ -40,16 +39,12 @@ app.use(
 );
 
 function getUserData(req) {
+  const token = req.headers.authorization;
   return new Promise((resolve, rejects) => {
-    jwt.verify(
-      req.cookies.token,
-      process.env.JWT_SECRET_KEY,
-      {},
-      async (err, userData) => {
-        if (err) throw err;
-        resolve(userData);
-      }
-    );
+    jwt.verify(token, process.env.JWT_SECRET_KEY, {}, async (err, userData) => {
+      if (err) throw err;
+      resolve(userData);
+    });
   });
 }
 
@@ -94,7 +89,7 @@ app.post("/login", async (req, res) => {
           {},
           (err, token) => {
             if (err) throw err;
-            res.status(200).cookie("token", token).json(foundUser);
+            res.status(200).json({ token, foundUser }); //.cookie("token", token)
           }
         );
       }
@@ -111,7 +106,7 @@ app.post("/logout", (req, res) => {
 
 //PROFILE INFORMATION
 app.get("/profile", (req, res) => {
-  const { token } = req.cookies;
+  const token = req.headers.authorization;
 
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET_KEY, {}, async (err, userData) => {
@@ -166,7 +161,7 @@ app.get("/places", async (req, res) => {
 
 //ADD NEW PLACE
 app.post("/place", async (req, res) => {
-  const { token } = req.cookies;
+  const token = req.headers.authorization;
   const {
     title,
     address,
@@ -202,7 +197,7 @@ app.post("/place", async (req, res) => {
 
 //UPDATE PLACE DETAILS
 app.put("/place", async (req, res) => {
-  const { token } = req.cookies;
+  const token = req.headers.authorization;
   const {
     id,
     title,
@@ -241,7 +236,7 @@ app.put("/place", async (req, res) => {
 
 //FIND USER's PLACES
 app.get("/user-places", (req, res) => {
-  const { token } = req.cookies;
+  const token = req.headers.authorization;
 
   jwt.verify(token, process.env.JWT_SECRET_KEY, {}, async (err, userData) => {
     if (err) throw err;
@@ -255,7 +250,6 @@ app.get("/place/:id", async (req, res) => {
   const place = await Place.findById(req.params.id);
   res.json(place);
 });
-
 
 //DELETE PLACE
 app.delete("/place/:id", async (req, res) => {

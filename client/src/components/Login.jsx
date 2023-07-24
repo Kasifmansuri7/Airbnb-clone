@@ -9,14 +9,15 @@ function Login() {
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const { setUser } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
 
   async function loginUser(event) {
     event.preventDefault();
 
     try {
-      const response = await axios.post("/login", { email, password });
-      setUser(response.data);
+      const { data } = await axios.post("/login", { email, password });
+      localStorage.setItem("token", data.token);
+      setUser(data.foundUser);
       navigate("/");
     } catch (err) {
       setMessage("Login failed. Please try again!");

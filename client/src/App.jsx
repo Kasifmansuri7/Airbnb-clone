@@ -12,12 +12,12 @@ import SinglePlacePage from "./pages/SinglePlacePage";
 import SingleBookingPage from "./pages/SingleBookingPage";
 import axios from "axios";
 import { UserContextProvider } from "./userContext";
-
-const backEndURL = import.meta.env.VITE_APP_BACKEND_URL
-
+const backEndURL = import.meta.env.VITE_APP_BACKEND_URL;
 
 axios.defaults.baseURL = backEndURL;
 axios.defaults.withCredentials = true;
+axios.defaults.headers.common["Authorization"] = localStorage.getItem("token");
+
 
 function App() {
   const router = createBrowserRouter([

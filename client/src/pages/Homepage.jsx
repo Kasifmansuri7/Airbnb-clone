@@ -8,7 +8,7 @@ import { UserContext } from "../userContext";
 function Homepage() {
   const [places, setPlaces] = useState([]);
   const [searchText, setSearchText] = useState("");
-  const { active } = useContext(UserContext);
+  const { user, active } = useContext(UserContext);
 
   useEffect(() => {
     const getResult = setTimeout(() => {
@@ -23,6 +23,7 @@ function Homepage() {
     }, 500);
     return () => clearTimeout(getResult);
   }, [searchText]);
+
 
   return (
     <React.Fragment>

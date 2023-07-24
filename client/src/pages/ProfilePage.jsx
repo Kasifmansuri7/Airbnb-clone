@@ -10,6 +10,7 @@ function ProfilePage() {
 
   async function logout() {
     await axios.post("/logout");
+    localStorage.removeItem("token");
     navigate("/");
     setUser(null);
   }
