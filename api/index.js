@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import connectDB from "./models/connect.js";
 import * as dotenv from "dotenv";
+dotenv.config();
 import cookieParser from "cookie-parser";
 import multer from "multer";
 import fs from "fs";
@@ -13,9 +14,9 @@ import { v2 as cloudinary } from "cloudinary";
 import User from "./models/User.js";
 import Place from "./models/Place.js";
 import Booking from "./models/Booking.js";
+const PORT = process.env.PORT || 3000;
 
 
-dotenv.config();
 //connect to DB
 connectDB(process.env.MONGODB_URL);
 
@@ -291,6 +292,6 @@ app.get("/bookings", async (req, res) => {
   res.json(bookingDoc);
 });
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log("Server started on port 3000");
 });
