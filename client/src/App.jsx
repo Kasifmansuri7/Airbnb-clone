@@ -15,6 +15,7 @@ import { UserContextProvider } from "./userContext";
 
 const backEndURL = import.meta.env.VITE_APP_BACKEND_URL
 
+
 axios.defaults.baseURL = backEndURL;
 axios.defaults.withCredentials = true;
 
