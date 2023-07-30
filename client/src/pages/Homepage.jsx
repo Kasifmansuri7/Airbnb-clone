@@ -11,7 +11,6 @@ function Homepage() {
   const { user, active } = useContext(UserContext);
   const [sort, setSort] = useState("new");
   const [filter, setFilter] = useState(500);
-  const [showFilter, setShowFilter] = useState(false);
 
   useEffect(() => {
     const getResult = setTimeout(() => {
@@ -84,10 +83,7 @@ function Homepage() {
             <option value="desc">Price(desc)</option>
           </select>
         </div>
-        <div
-          className="inline-flex gap-2 items-center border py-3 px-6 rounded-2xl cursor-pointer"
-          onClick={() => setShowFilter((prev) => !prev)}
-        >
+        <div className="inline-flex gap-2 items-center border py-3 px-6 rounded-2xl cursor-pointer">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -103,18 +99,15 @@ function Homepage() {
             />
           </svg>
           <span className="text-lg">Filter</span>
-          {showFilter && (
-            <>
-              <span>$50</span>
-              <input
-                type="range"
-                min={50}
-                max={500}
-                onChange={(e) => setFilter(e.target.value)}
-              />
-              <span>${filter ? filter : 0}</span>
-            </>
-          )}
+
+          <span>$50</span>
+          <input
+            type="range"
+            min={50}
+            max={500}
+            onChange={(e) => setFilter(e.target.value)}
+          />
+          <span>${filter ? filter : 0}</span>
         </div>
       </div>
       <div className=" px-6 mt-10 grid  gap-x-6 gap-y-8 md:grid-cols-4 sm:grid-cols-1">
