@@ -7,6 +7,7 @@ import connectDB from "./models/connect.js";
 import * as dotenv from "dotenv";
 dotenv.config();
 import cookieParser from "cookie-parser";
+import download from "image-downloader";
 import multer from "multer";
 import fs from "fs";
 import { v2 as cloudinary } from "cloudinary";
@@ -124,6 +125,11 @@ app.post("/upload-by-link", async (req, res) => {
   const { link } = req.body;
   const result = await cloudinary.uploader.upload(link);
   res.json(result.secure_url);
+  // const newName = Math.random() + ".png";
+  // await download.image({
+  //   url: link,
+  //   dest: "D:\\Tutorial\\Projects\\airbnb\\api/uploads/" + newName,
+  // });
 });
 
 // await download.image({
@@ -177,6 +183,7 @@ app.post("/place", async (req, res) => {
 
   jwt.verify(token, process.env.JWT_SECRET_KEY, {}, async (err, userData) => {
     if (err) throw err;
+    
     const placeDoc = await Place.create({
       owner: userData.id,
       title,

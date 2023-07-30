@@ -33,7 +33,7 @@ function ShowAllPhotos({ setShowAllPhotos, place }) {
               <img
                 key={short.generate()}
                 className="h-4/5"
-                src={"http://localhost:3000/uploads/" + photo}
+                src={photo}
               />
             );
           })}

@@ -17,7 +17,6 @@ function BookingsPage() {
     });
   }, []);
 
-  console.log(bookings);
   if (!user) {
     navigate("/login");
   }

@@ -55,11 +55,11 @@ function PlacesForm() {
     };
     if (id) {
       //update
-      const { data } = await axios.put("/places", { id, ...newPlaceData });
+      const { data } = await axios.put("/place", { id, ...newPlaceData });
       alert("Place data updated successfully!");
     } else {
       //save
-      const { data } = await axios.post("/places", newPlaceData);
+      const { data } = await axios.post("/place", newPlaceData);
       alert("New place successfully added!");
     }
     navigate("/account/places");
