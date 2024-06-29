@@ -100,10 +100,10 @@ function Homepage() {
           </svg>
           <span className="text-lg">Filter</span>
 
-          <span>$50</span>
+          <span>$0</span>
           <input
             type="range"
-            min={50}
+            min={0}
             max={500}
             onChange={(e) => setFilter(e.target.value)}
           />
